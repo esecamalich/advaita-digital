@@ -12,6 +12,8 @@ const pinkCircles = {
   tl: '#pink-circle-tl'
 };
 
+const isMobile = window.innerWidth < 768;
+
 if (history.scrollRestoration) {
   history.scrollRestoration = 'manual';
 } else {
@@ -202,10 +204,12 @@ tl_tagline.fromTo(chars, {
   stagger: { amount: 0.1 },
   onComplete: () => {
 
-    setInterval(() => {
-      heroTagline.textContent = taglineStrings[currentIndex];
-      currentIndex = (currentIndex + 1) % taglineStrings.length;
-    }, 3000);
+    if (heroTagline) {
+        setInterval(() => {
+            heroTagline.textContent = taglineStrings[currentIndex];
+            currentIndex = (currentIndex + 1) % taglineStrings.length;
+        }, 3000);
+    }
 
   }
 })
@@ -225,128 +229,135 @@ tl_footer.to('.request-form', {
     y: 0
   }, '<')
 
-let tl_light = gsap.timeline({
+let tl_light, tl_expand, tl_method, tl_reveal, tl_stats;
 
-  scrollTrigger: {
-    trigger: '.hero-transition',
-    start: 'top top',
-    end: 'bottom bottom',
-    scrub: 1,
+if (!isMobile) {
+    tl_light = gsap.timeline({
 
-  }
+    scrollTrigger: {
+        trigger: '.hero-transition',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1,
 
-});
+    }
 
-tl_light.addLabel('start')
-  .to('.hero-transition', {
-    zIndex: 2,
-  })
-  .to('.pulse-wrapper', {
-    display: "block"
-  })
-  .to('.pulse-circle', {
-    scale: 1
-  })
-  .to('.pulse', {
-    opacity: 1,
-    stagger: 0.1
-  })
-  .to('.main-navigation', {
-    display: "flex",
-    opacity: 1,
-  })
-  .to('.pulse-wrapper', {
-    x: "100%"
-  })
-  .from('.section_home-intro', {
-    display: "none",
-  })
-  .from('.home-intro__headers-wrapper', {
-    opacity: 0,
-    duration: 0.3
-  })
-  .from('.home-intro__paragraphs', {
-    opacity: 0,
-    duration: 0.3
-  })
-  .addLabel('middle')
-  .to('.pulse-wrapper', {
-    x: "0",
-    delay: 1,
-  })
-  .to('.home-intro__paragraphs', {
-    opacity: 0,
-    duration: 0.3,
-    delay: 1,
-  })
-  .to('.home-intro__headers-wrapper', {
-    opacity: 0,
-    duration: 0.3
-  })
-  .to('.section_home-intro', {
-    display: "none",
-  })
-  .from('.home-about__headline', {
-    opacity: 0,
-    duration: 0.3
-  })
-  .from('.home_about__top-paragraph', {
-    opacity: 0,
-    duration: 0.3
-  })
-  .from('.home-about__bottom-paragraph', {
-    opacity: 0,
-    duration: 0.3
-  })
-  .from('.home-about__pointer', {
-    scaleX: 0,
-    transformOrigin: "right",
-    duration: 0.3
-  })
-  .from('.home-about__pointer', {
-    "--pointer-height": 0,
-    "--pointer-top": 0,
-    "--pointer-opacity": 0,
-  })
-  .addLabel('end')
+    });
 
-let tl_expand = gsap.timeline({
+    tl_light.addLabel('start')
+        .to('.hero-transition', {
+            zIndex: 2,
+        })
+        .to('.pulse-wrapper', {
+            display: "block"
+        })
+        .to('.pulse-circle', {
+            scale: 1
+        })
+        .to('.pulse', {
+            opacity: 1,
+            stagger: 0.1
+        })
+        .to('.main-navigation', {
+            display: "flex",
+            opacity: 1,
+        })
+        .to('.pulse-wrapper', {
+            x: "100%"
+        })
+        .from('.section_home-intro', {
+            display: "none",
+        })
+        .from('.home-intro__headers-wrapper', {
+            opacity: 0,
+            duration: 0.3
+        })
+        .from('.home-intro__paragraphs', {
+            opacity: 0,
+            duration: 0.3
+        })
+        .addLabel('middle')
+        .to('.pulse-wrapper', {
+            x: "0",
+            delay: 1,
+        })
+        .to('.home-intro__paragraphs', {
+            opacity: 0,
+            duration: 0.3,
+            delay: 1,
+        })
+        .to('.home-intro__headers-wrapper', {
+            opacity: 0,
+            duration: 0.3
+        })
+        .to('.section_home-intro', {
+            display: "none",
+        })
+        .from('.home-about__headline', {
+            opacity: 0,
+            duration: 0.3
+        })
+        .from('.home_about__top-paragraph', {
+            opacity: 0,
+            duration: 0.3
+        })
+        .from('.home-about__bottom-paragraph', {
+            opacity: 0,
+            duration: 0.3
+        })
+        .from('.home-about__pointer', {
+            scaleX: 0,
+            transformOrigin: "right",
+            duration: 0.3
+        })
+        .from('.home-about__pointer', {
+            "--pointer-height": 0,
+            "--pointer-top": 0,
+            "--pointer-opacity": 0,
+        })
+        .addLabel('end')
 
-  scrollTrigger: {
-    trigger: '.section__home--services-wrapper',
-    start: 'top bottom',
-    end: 'top top',
-    scrub: 1,
-  }
+}
 
-})
+if (!isMobile) {
+    tl_expand = gsap.timeline({
 
-tl_expand.to('.pulse', {
-    scale: 8,
-    opacity: 0,
-    duration: 0.3,
-    stagger: 0.1
-  })
-  .to('.pulse-circle', {
-    scale: 6,
-    duration: 0.3,
-  }, '<+=0.1')
-  .to('.home-about__headline', {
-    opacity: 0,
-    duration: 0.3
-  }, '<')
-  .to('.home_about__top-paragraph', {
-    opacity: 0,
-    duration: 0.3
-  }, '<')
-  .to('.home-about__bottom-paragraph', {
-    opacity: 0,
-    duration: 0.3
-  }, '<')
-  .to('.home-about__pointer', {
-    opacity: 0,
-    duration: 0.3
-  }, '<')
+    scrollTrigger: {
+        trigger: '.section__home--services-wrapper',
+        start: 'top bottom',
+        end: 'top top',
+        scrub: 1,
+    }
+
+    })
+
+    tl_expand.to('.pulse', {
+        scale: 8,
+        opacity: 0,
+        duration: 0.3,
+        stagger: 0.1
+    })
+    .to('.pulse-circle', {
+        scale: 6,
+        duration: 0.3,
+    }, '<+=0.1')
+    .to('.home-about__headline', {
+        opacity: 0,
+        duration: 0.3
+    }, '<')
+    .to('.home_about__top-paragraph', {
+        opacity: 0,
+        duration: 0.3
+    }, '<')
+    .to('.home-about__bottom-paragraph', {
+        opacity: 0,
+        duration: 0.3
+    }, '<')
+    .to('.home-about__pointer', {
+        opacity: 0,
+        duration: 0.3
+    }, '<')
+}
 
 //let services = gsap.utils.toArray(".services__wrapper");
 const services = document.getElementById('services__wrapper');
@@ -357,7 +368,7 @@ let mm = gsap.matchMedia();
 mm.add("(min-width: 768px)", () => {
 
   // desktop setup code here...
-  let tl_services = gsap.timeline({
+  tl_services = gsap.timeline({
 
     scrollTrigger: {
       trigger: '.section__home--services-wrapper',
@@ -383,7 +394,7 @@ mm.add("(max-width: 767px)", () => {
 
   items.forEach((item) => {
 
-    let tl_services = gsap.timeline({
+    tl_services = gsap.timeline({
       scrollTrigger: {
         trigger: item,
         start: 'top 75%',
@@ -403,77 +414,83 @@ mm.add("(max-width: 767px)", () => {
 
 });
 
-let tl_stats = gsap.timeline({
+if (!isMobile) {
+    tl_stats = gsap.timeline({
 
-  scrollTrigger: {
-    trigger: '.stats__list',
-    start: 'top 90%',
-    end: 'bottom 50%',
-    scrub: 1,
-  }
+    scrollTrigger: {
+        trigger: '.stats__list',
+        start: 'top 90%',
+        end: 'bottom 50%',
+        scrub: 1,
+    }
 
-});
+    });
 
-tl_stats.from('.stats__color-block', {
-    scaleX: 0,
-    transformOrigin: "left",
-    duration: 0.3,
-    stagger: 0.1
-  })
-  .from('.stats__text', {
-    opacity: 0,
-    duration: 0.3,
-    stagger: 0.1
-  }, '<+=0.3')
+    tl_stats.from('.stats__color-block', {
+        scaleX: 0,
+        transformOrigin: "left",
+        duration: 0.3,
+        stagger: 0.1
+    })
+    .from('.stats__text', {
+        opacity: 0,
+        duration: 0.3,
+        stagger: 0.1
+    }, '<+=0.3')
+}
 
-let tl_method = gsap.timeline({
+if (!isMobile) {
+    tl_method = gsap.timeline({
 
-  scrollTrigger: {
-    trigger: '.method__list',
-    start: 'top 90%',
-    end: 'bottom bottom',
-    scrub: 1,
-  }
+    scrollTrigger: {
+        trigger: '.method__list',
+        start: 'top 90%',
+        end: 'bottom bottom',
+        scrub: 1,
+    }
 
-})
+    })
 
-tl_method.from('.method__single', {
-    x: '100%',
-    duration: 0.3,
-    stagger: 0.1,
-  })
-  .from('.method__description-wrapper', {
-    opacity: 0,
-    duration: 0.3,
-    stagger: 0.1
-  }, '<+=0.3')
+    tl_method.from('.method__single', {
+        x: '100%',
+        duration: 0.3,
+        stagger: 0.1,
+    })
+    .from('.method__description-wrapper', {
+        opacity: 0,
+        duration: 0.3,
+        stagger: 0.1
+    }, '<+=0.3')
+}
 
-let tl_reveal = gsap.timeline({
+if (!isMobile) {
+    tl_reveal = gsap.timeline({
 
-  scrollTrigger: {
-    trigger: '.page-wrapper',
-    start: 'bottom 175%',
-    end: 'bottom bottom',
-    scrub: 1,
-  }
+    scrollTrigger: {
+        trigger: '.page-wrapper',
+        start: 'bottom 175%',
+        end: 'bottom bottom',
+        scrub: 1,
+    }
 
-})
+    })
 
-tl_reveal.to('.pulse-circle', {
-    scale: 0,
-    duration: 1,
-  })
-  .to('.section__home--method', {
-    opacity: 0,
-    duration: 0.3,
-  }, '<')
-  .to('.main-navigation', {
-    opacity: 0,
-    duration: 0.3,
-  }, '<')
-  .to('.pulse-wrapper', {
-    zIndex: -1
-  })
+    tl_reveal.to('.pulse-circle', {
+        scale: 0,
+        duration: 1,
+    })
+    .to('.section__home--method', {
+        opacity: 0,
+        duration: 0.3,
+    }, '<')
+    .to('.main-navigation', {
+        opacity: 0,
+        duration: 0.3,
+    }, '<')
+    .to('.pulse-wrapper', {
+        zIndex: -1
+    })
+}
 
 var master = gsap.timeline()
   .add(tl_intro)
@@ -482,11 +499,14 @@ var master = gsap.timeline()
   .add(tl_headline, '<+=1.5')
   .add(tl_tagline, '<+=0.8')
   .add(tl_footer, '<+=0.5')
-  .add(tl_light)
-  .add(tl_expand)
-  .add(tl_services)
-  .add(tl_method)
-  .add(tl_reveal)
+
+if (!isMobile) {
+  master
+    .add(tl_light)
+    .add(tl_expand)
+    .add(tl_method)
+    .add(tl_reveal);
+}
 //.add(tl_stats)
 //.add(tl_about, '>')
 
