@@ -237,10 +237,10 @@ if (!isMobile) {
     });
 
     tl_light.addLabel('start')
-        .to('.hero-transition', {
+        .set('.hero-transition', {
             zIndex: 2,
         })
-        .to('.pulse-wrapper', {
+        .set('.pulse-wrapper', {
             display: "block"
         })
         .to('.pulse-circle', {
@@ -250,9 +250,11 @@ if (!isMobile) {
             opacity: 1,
             stagger: 0.1
         })
+        .set('.main-navigation', {
+          display: "flex"
+        })
         .to('.main-navigation', {
-            display: "flex",
-            opacity: 1,
+          opacity: 1,
         })
         .to('.pulse-wrapper', {
             x: "100%"
@@ -260,42 +262,34 @@ if (!isMobile) {
         .from('.section_home-intro', {
             display: "none",
         })
-        .from('.home-intro__headers-wrapper', {
-            opacity: 0,
-            duration: 0.3
-        })
-        .from('.home-intro__paragraphs', {
-            opacity: 0,
-            duration: 0.3
+        .from(['.home-intro__headers-wrapper', '.home-intro__paragraphs'], {
+          opacity: 0,
+          duration: 0.3,
+          stagger: 0.05,
         })
         .addLabel('middle')
         .to('.pulse-wrapper', {
-            x: "0",
-            delay: 1,
-        })
+          x: "0",
+        }, '+=1')
         .to('.home-intro__paragraphs', {
-            opacity: 0,
-            duration: 0.3,
-            delay: 1,
-        })
+          opacity: 0,
+          duration: 0.3
+        }, '+=1')
         .to('.home-intro__headers-wrapper', {
             opacity: 0,
             duration: 0.3
         })
-        .to('.section_home-intro', {
+        .set('.section_home-intro', {
             display: "none",
         })
-        .from('.home-about__headline', {
-            opacity: 0,
-            duration: 0.3
-        })
-        .from('.home_about__top-paragraph', {
-            opacity: 0,
-            duration: 0.3
-        })
-        .from('.home-about__bottom-paragraph', {
-            opacity: 0,
-            duration: 0.3
+        .from([
+          '.home-about__headline',
+          '.home_about__top-paragraph',
+          '.home-about__bottom-paragraph'
+        ], {
+          opacity: 0,
+          duration: 0.3,
+          stagger: 0.05
         })
         .from('.home-about__pointer', {
             scaleX: 0,
@@ -333,22 +327,16 @@ if (!isMobile) {
         scale: 6,
         duration: 0.3,
     }, '<+=0.1')
-    .to('.home-about__headline', {
-        opacity: 0,
-        duration: 0.3
-    }, '<')
-    .to('.home_about__top-paragraph', {
-        opacity: 0,
-        duration: 0.3
-    }, '<')
-    .to('.home-about__bottom-paragraph', {
-        opacity: 0,
-        duration: 0.3
-    }, '<')
-    .to('.home-about__pointer', {
-        opacity: 0,
-        duration: 0.3
-    }, '<')
+    .to([
+    '.home-about__headline',
+    '.home_about__top-paragraph',
+    '.home-about__bottom-paragraph'
+  ], {
+    opacity: 0,
+    duration: 0.3,
+    stagger: 0.05
+  }, '<')
+
 }
 
 //let services = gsap.utils.toArray(".services__wrapper");
