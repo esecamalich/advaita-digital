@@ -90,36 +90,26 @@ let tl_hero = gsap.timeline();
 
 tl_hero.to('.logo', {
     y: 4,
-    opacity: 100
+    opacity: 100,
+    duration: .3,
   })
   .to('.hero-drop', {
     yPercent: -100,
     ease: "power4.inOut",
     duration: .5,
   }, '<')
-  .to('.drop-bottom', {
+  .to(['.drop-bottom', '.drop-middle', '.drop-top'], {
     y: -4,
     opacity: 100,
     duration: .3,
-  })
-  .to('.drop-middle', {
-    y: -4,
-    opacity: 100,
-    duration: .3,
-  })
-  .to('.drop-top', {
-    y: -4,
-    opacity: 100,
-    duration: .3,
-  })
-  .to('#hero-circle-left', {
-    x: -16,
-    opacity: 1
-  }, '<')
-  .to('#hero-circle-right', {
-    x: 16,
-    opacity: 1
-  }, '<')
+    stagger: 0.3,
+  }, '>')
+  .to(['#hero-circle-left', '#hero-circle-right'], {
+    x: (i) => i === 0 ? -16 : 16,
+    opacity: 1,
+    duration: 0.3,
+    stagger: 0.05
+  }, '>')
   .to('.pink-glow', {
     opacity: 1,
     duration: .3
@@ -498,8 +488,8 @@ var master = gsap.timeline()
   //.add(tl_intro)
   .add(tl_hero, /*'<+=6.2'*/)
   //.add(tl_hero)
-  .add(tl_headline, '<+=1.5')
-  .add(tl_tagline, '<+=0.8')
+  .add(tl_headline, '>')
+  .add(tl_tagline, '<+=0.3')
   .add(tl_footer, '<+=0.5')
 
 if (!isMobile) {
