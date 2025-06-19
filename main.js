@@ -14,6 +14,8 @@ const pinkCircles = {
 
 const isMobile = window.innerWidth < 768;
 
+gsap.set("#loader", { display: "none" });
+
 if (history.scrollRestoration) {
   history.scrollRestoration = 'manual';
 } else {
@@ -24,79 +26,65 @@ if (history.scrollRestoration) {
 
 let xN = -16,
   xP = 16,
-  lineSpeed = 1.5
+  lineSpeed = 3
 
-let tl_intro = gsap.timeline();
-tl_intro.addLabel("start");
+let tl_intro = gsap.timeline({ paused: true });
 
 tl_intro.to('#graph-left', {
     xPercent: 100,
     ease: "power4.inOut",
     duration: lineSpeed,
-  }, 'start')
+  })
   .to("#graph-right", {
     xPercent: -100,
     ease: "power4.inOut",
     duration: lineSpeed,
-  }, 'start')
-
-  .addLabel("bubbleIn", "start+=1.2")
+  }, '<')
   .to("#loader-bubble", {
     scale: 1,
     ease: "elastic",
-    duration: 2.5,
-    immediateRender: false,
-  }, 'bubbleIn')
+    duration: 5,
+  }, '>-1')
   .to("#loader-icon", {
     scale: 1,
     ease: "elastic",
-    duration: 2.5,
-    immediateRender: false,
-  }, 'bubbleIn+=0.15')
-
-  .addLabel("graphFade", "bubbleIn+=2")
+    duration: 5,
+  }, '<+=0.3')
   .to(".loader-graph", {
     opacity: 0,
-    duration: 0.4,
-  }, 'graphFade')
-
-  .addLabel("bubbleOut", "graphFade+=0.2")
+    duration: .5,
+  }, '<+=0.5')
   .to("#loader-bubble", {
     scale: 5,
     ease: "elastic",
-    duration: 1.2,
-  }, 'bubbleOut')
+    duration: 2,
+  }, '<+=0.5')
   .to("#loader-icon", {
     scale: 0,
     opacity: 0,
     ease: "power4.inOut",
-    duration: 0.8,
-  }, 'bubbleOut+=0.1')
-
-  .addLabel("headlineIn", "bubbleOut+=0.5")
+    duration: 1,
+  }, '<+=0.5')
   .to("#loader-headline", {
     scale: 1,
     ease: "power4.inOut",
-    duration: 0.8,
-  }, 'headlineIn')
-
-  .addLabel("bubbleExplode", "headlineIn+=0.6")
+    duration: 1,
+  }, '<')
   .to("#loader-bubble", {
     scale: 11,
     opacity: 0,
-    ease: "power4.in",
-    duration: 1.2,
-  }, 'bubbleExplode')
+    ease: "elastic",
+    duration: 5,
+  }, '<+=0.5')
   .to("#loader-headline", {
     opacity: 0,
     y: 8,
     ease: "power4.inOut",
     duration: 1,
-  }, 'bubbleExplode+=0.3')
-
+  }, '<+=1')
   .to("#loader", {
     display: "none"
-  }, 'bubbleExplode+=0.9');
+  }, '<+=0.5');
 
 let tl_hero = gsap.timeline();
 
@@ -252,7 +240,7 @@ if (!isMobile) {
         trigger: '.hero-transition',
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1,
+        scrub: 0.3,
 
     }
 
@@ -340,7 +328,7 @@ if (!isMobile) {
         trigger: '.section__home--services-wrapper',
         start: 'top bottom',
         end: 'top top',
-        scrub: 1,
+        scrub: 0.3,
     }
 
     })
@@ -388,7 +376,7 @@ mm.add("(min-width: 768px)", () => {
       trigger: '.section__home--services-wrapper',
       start: '200 top',
       end: 'bottom bottom',
-      scrub: 1,
+      scrub: 0.3,
     }
 
   });
@@ -413,7 +401,7 @@ mm.add("(max-width: 767px)", () => {
         trigger: item,
         start: 'top 75%',
         end: 'bottom bottom',
-        scrub: 1,
+        scrub: 0.3,
       }
 
     });
@@ -435,7 +423,7 @@ if (!isMobile) {
         trigger: '.stats__list',
         start: 'top 90%',
         end: 'bottom 50%',
-        scrub: 1,
+        scrub: 0.3,
     }
 
     });
@@ -460,7 +448,7 @@ if (!isMobile) {
         trigger: '.method__list',
         start: 'top 90%',
         end: 'bottom bottom',
-        scrub: 1,
+        scrub: 0.3,
     }
 
     })
@@ -484,7 +472,7 @@ if (!isMobile) {
         trigger: '.page-wrapper',
         start: 'bottom 175%',
         end: 'bottom bottom',
-        scrub: 1,
+        scrub: 0.3,
     }
 
     })
@@ -507,8 +495,8 @@ if (!isMobile) {
 }
 
 var master = gsap.timeline()
-  .add(tl_intro)
-  .add(tl_hero, '<+=6.2')
+  //.add(tl_intro)
+  .add(tl_hero, /*'<+=6.2'*/)
   //.add(tl_hero)
   .add(tl_headline, '<+=1.5')
   .add(tl_tagline, '<+=0.8')
