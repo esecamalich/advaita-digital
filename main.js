@@ -24,65 +24,79 @@ if (history.scrollRestoration) {
 
 let xN = -16,
   xP = 16,
-  lineSpeed = 3
+  lineSpeed = 1.5
 
 let tl_intro = gsap.timeline();
+tl_intro.addLabel("start");
 
 tl_intro.to('#graph-left', {
     xPercent: 100,
     ease: "power4.inOut",
     duration: lineSpeed,
-  })
+  }, 'start')
   .to("#graph-right", {
     xPercent: -100,
     ease: "power4.inOut",
     duration: lineSpeed,
-  }, '<')
+  }, 'start')
+
+  .addLabel("bubbleIn", "start+=1.2")
   .to("#loader-bubble", {
     scale: 1,
     ease: "elastic",
-    duration: 5,
-  }, '>-1')
+    duration: 2.5,
+    immediateRender: false,
+  }, 'bubbleIn')
   .to("#loader-icon", {
     scale: 1,
     ease: "elastic",
-    duration: 5,
-  }, '<+=0.3')
+    duration: 2.5,
+    immediateRender: false,
+  }, 'bubbleIn+=0.15')
+
+  .addLabel("graphFade", "bubbleIn+=2")
   .to(".loader-graph", {
     opacity: 0,
-    duration: .5,
-  }, '<+=0.5')
+    duration: 0.4,
+  }, 'graphFade')
+
+  .addLabel("bubbleOut", "graphFade+=0.2")
   .to("#loader-bubble", {
     scale: 5,
     ease: "elastic",
-    duration: 2,
-  }, '<+=0.5')
+    duration: 1.2,
+  }, 'bubbleOut')
   .to("#loader-icon", {
     scale: 0,
     opacity: 0,
     ease: "power4.inOut",
-    duration: 1,
-  }, '<+=0.5')
+    duration: 0.8,
+  }, 'bubbleOut+=0.1')
+
+  .addLabel("headlineIn", "bubbleOut+=0.5")
   .to("#loader-headline", {
     scale: 1,
     ease: "power4.inOut",
-    duration: 1,
-  }, '<')
+    duration: 0.8,
+  }, 'headlineIn')
+
+  .addLabel("bubbleExplode", "headlineIn+=0.6")
   .to("#loader-bubble", {
     scale: 11,
     opacity: 0,
-    ease: "elastic",
-    duration: 5,
-  }, '<+=0.5')
+    ease: "power4.in",
+    duration: 1.2,
+  }, 'bubbleExplode')
   .to("#loader-headline", {
     opacity: 0,
     y: 8,
     ease: "power4.inOut",
     duration: 1,
-  }, '<+=1')
+  }, 'bubbleExplode+=0.3')
+
   .to("#loader", {
     display: "none"
-  }, '<+=0.5');
+  }, 'bubbleExplode+=0.9');
 
 let tl_hero = gsap.timeline();
 
