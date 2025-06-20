@@ -86,58 +86,63 @@ tl_intro.to('#graph-left', {
     display: "none"
   }, '<+=0.5');
 
-let tl_hero = gsap.timeline();
+let tl_hero
 
-tl_hero.to('.logo', {
-    y: 4,
-    opacity: 100,
-    duration: .3,
-  })
-  .to('.hero-drop', {
-    yPercent: -100,
-    ease: "power4.inOut",
-    duration: .5,
-  }, '<')
-  .to(['.drop-bottom', '.drop-middle', '.drop-top'], {
-    y: -4,
-    opacity: 100,
-    duration: .3,
-    stagger: 0.3,
-  }, '>')
-  .to(['#hero-circle-left', '#hero-circle-right'], {
-    x: (i) => i === 0 ? -16 : 16,
-    opacity: 1,
-    duration: 0.3,
-    stagger: 0.05
-  }, '>')
-  .to('.pink-glow', {
-    opacity: 1,
-    duration: .3
-  }, '<')
-  .to('#pink-circle-tr', {
-    opacity: .5,
-    x: xN,
-    y: xP,
-    duration: .3
-  }, '<')
-  .to('#pink-circle-br', {
-    opacity: .5,
-    x: xN,
-    y: xN,
-    duration: .3
-  }, '<')
-  .to('#pink-circle-bl', {
-    opacity: .5,
-    x: xP,
-    y: xN,
-    duration: .3
-  }, '<')
-  .to('#pink-circle-tl', {
-    opacity: .5,
-    x: xP,
-    y: xP,
-    duration: .3
-  }, '<')
+if (!isMobile) {
+
+  tl_hero = gsap.timeline();
+
+  tl_hero.to('.logo', {
+      y: 4,
+      opacity: 100,
+      duration: .3,
+    })
+    .to('.hero-drop', {
+      yPercent: -100,
+      ease: "power4.inOut",
+      duration: .5,
+    }, '<')
+    .to(['.drop-bottom', '.drop-middle', '.drop-top'], {
+      y: -4,
+      opacity: 100,
+      duration: .3,
+      stagger: 0.3,
+    }, '>')
+    .to(['#hero-circle-left', '#hero-circle-right'], {
+      x: (i) => i === 0 ? -16 : 16,
+      opacity: 1,
+      duration: 0.3,
+      stagger: 0.05
+    }, '>')
+    .to('.pink-glow', {
+      opacity: 1,
+      duration: .3
+    }, '<')
+    .to('#pink-circle-tr', {
+      opacity: .5,
+      x: xN,
+      y: xP,
+      duration: .3
+    }, '<')
+    .to('#pink-circle-br', {
+      opacity: .5,
+      x: xN,
+      y: xN,
+      duration: .3
+    }, '<')
+    .to('#pink-circle-bl', {
+      opacity: .5,
+      x: xP,
+      y: xN,
+      duration: .3
+    }, '<')
+    .to('#pink-circle-tl', {
+      opacity: .5,
+      x: xP,
+      y: xP,
+      duration: .3
+    }, '<')
+}
 
 const headline = new SplitType('#hero-headline', { types: 'chars' });
 
@@ -206,20 +211,24 @@ tl_tagline.fromTo(chars, {
   }
 })
 
-let tl_footer = gsap.timeline();
+let tl_footer
 
-tl_footer.to('.request-form', {
-    opacity: 1,
-    y: 0
-  })
-  .to('.language-selector', {
-    opacity: 1,
-    y: 0
-  })
-  .to('.social-icons', {
-    opacity: 1,
-    y: 0
-  }, '<')
+if (!isMobile) {
+  tl_footer = gsap.timeline();
+
+  tl_footer.to('.request-form', {
+      opacity: 1,
+      y: 0
+    })
+    .to('.language-selector', {
+      opacity: 1,
+      y: 0
+    })
+    .to('.social-icons', {
+      opacity: 1,
+      y: 0
+    }, '<')
+}
 
 let tl_light, tl_expand, tl_method, tl_reveal, tl_stats;
 
@@ -256,6 +265,9 @@ if (!isMobile) {
         .to('.main-navigation', {
           opacity: 1,
         })
+        .set('.hero-header', {
+          display: "none"
+        }, '<')
         .to('.pulse-wrapper', {
             x: "100%"
         })
@@ -289,12 +301,12 @@ if (!isMobile) {
         ], {
           opacity: 0,
           duration: 0.3,
-          stagger: 0.05
+          stagger: 0.05,
         })
         .from('.home-about__pointer', {
             scaleX: 0,
             transformOrigin: "right",
-            duration: 0.3
+            duration: 0.3,
         })
         .from('.home-about__pointer', {
             "--pointer-height": 0,
@@ -317,25 +329,31 @@ if (!isMobile) {
 
     })
 
-    tl_expand.to('.pulse', {
-        scale: 8,
+    
+
+    tl_expand.to([
+      '.pulse',
+      '.pulse-circle',
+    ], {
         opacity: 0,
         duration: 0.3,
         stagger: 0.1
     })
-    .to('.pulse-circle', {
-        scale: 6,
-        duration: 0.3,
-    }, '<+=0.1')
     .to([
     '.home-about__headline',
     '.home_about__top-paragraph',
-    '.home-about__bottom-paragraph'
-  ], {
-    opacity: 0,
-    duration: 0.3,
-    stagger: 0.05
-  }, '<')
+    '.home-about__bottom-paragraph',
+    '.home-about__pointer',
+    ], {
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.05
+    }, '<')
+    .to('.section__home--services-wrapper', {
+        backgroundColor: '#fafafa',
+        duration: 0.3,
+        ease: 'power1.out'
+      }, '<')
 
 }
 
@@ -441,6 +459,9 @@ if (!isMobile) {
         duration: 0.3,
         stagger: 0.1
     }, '<+=0.3')
+    .set('.hero-header', {
+      display: "block"
+    }, '<')
 }
 
 if (!isMobile) {
@@ -467,18 +488,23 @@ if (!isMobile) {
         opacity: 0,
         duration: 0.3,
     }, '<')
-    .to('.pulse-wrapper', {
-        zIndex: -1
-    })
 }
 
 var master = gsap.timeline()
   //.add(tl_intro)
-  .add(tl_hero, /*'<+=6.2'*/)
+  if (!isMobile) {
+    master
+    .add(tl_hero, /*'<+=6.2'*/)
+  }
   //.add(tl_hero)
+  master
   .add(tl_headline, '>')
   .add(tl_tagline, '<+=0.3')
-  .add(tl_footer, '<+=0.5')
+
+  if (!isMobile) {
+    master
+    .add(tl_footer, '<+=0.5')
+  }
 
 if (!isMobile) {
   master
