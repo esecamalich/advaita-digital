@@ -12,7 +12,7 @@ const pinkCircles = {
   tl: '#pink-circle-tl'
 };
 
-const isMobile = window.innerWidth < 768;
+const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
 gsap.set("#loader", { display: "none" });
 
@@ -144,24 +144,28 @@ if (!isMobile) {
     }, '<')
 }
 
-const headline = new SplitType('#hero-headline', { types: 'chars' });
+let tl_headline
 
-let tl_headline = gsap.timeline();
+if (!isMobile) {
 
-tl_headline.to('.hero-headline__text', {
-    opacity: 1,
-    duration: 0
-  })
-  .fromTo(headline.chars, {
-    yPercent: 100,
-  }, {
-    yPercent: 0,
-    duration: 0.5,
-    stagger: { amount: 0.1 },
-  }, '<');
+  const headline = new SplitType('#hero-headline', { types: 'chars' });
 
-const tagline = new SplitType('#hero-tagline', { types: 'lines, chars', charsClass: 'char' });
-const chars = tagline.chars;
+  tl_headline = gsap.timeline();
+
+  tl_headline.to('.hero-headline__text', {
+      opacity: 1,
+      duration: 0
+    })
+    .fromTo(headline.chars, {
+      yPercent: 100,
+    }, {
+      yPercent: 0,
+      duration: 0.5,
+      stagger: { amount: 0.1 },
+    }, '<');
+
+}
+
 const heroTagline = document.getElementById('hero-tagline');
 
 // Check if the current URL includes a specific string
@@ -191,25 +195,38 @@ if (currentURL.includes('/en')) {
 }
 
 let currentIndex = 0;
-let tl_tagline = gsap.timeline();
 
-tl_tagline.fromTo(chars, {
-  yPercent: 100,
-}, {
-  yPercent: 0,
-  duration: 0.5,
-  stagger: { amount: 0.1 },
-  onComplete: () => {
+let tl_tagline
 
-    if (heroTagline) {
-        setInterval(() => {
-            heroTagline.textContent = taglineStrings[currentIndex];
-            currentIndex = (currentIndex + 1) % taglineStrings.length;
-        }, 3000);
+if (!isMobile) {
+
+  const tagline = new SplitType('#hero-tagline', { types: 'lines, chars', charsClass: 'char' });
+  const chars = tagline.chars;
+
+  tl_tagline = gsap.timeline();
+
+  tl_tagline.fromTo(chars, {
+    yPercent: 100,
+  }, {
+    yPercent: 0,
+    duration: 0.5,
+    stagger: { amount: 0.1 },
+    onComplete: () => {
+      startTaglineRotation();
     }
+  });
+} else {
+  startTaglineRotation();
+}
 
+function startTaglineRotation() {
+  if (heroTagline) {
+    setInterval(() => {
+      heroTagline.textContent = taglineStrings[currentIndex];
+      currentIndex = (currentIndex + 1) % taglineStrings.length;
+    }, 3000);
   }
-})
+}
 
 let tl_footer
 
@@ -233,127 +250,125 @@ if (!isMobile) {
 let tl_light, tl_expand, tl_method, tl_reveal, tl_stats;
 
 if (!isMobile) {
-    tl_light = gsap.timeline({
+  tl_light = gsap.timeline({
 
     scrollTrigger: {
-        trigger: '.hero-transition',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.3,
+      trigger: '.hero-transition',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.3,
 
     }
 
-    });
+  });
 
-    tl_light.addLabel('start')
-        .set('.hero-transition', {
-            zIndex: 2,
-        })
-        .set('.pulse-wrapper', {
-            display: "block"
-        })
-        .to('.pulse-circle', {
-            scale: 1
-        })
-        .to('.pulse', {
-            opacity: 1,
-            stagger: 0.1
-        })
-        .set('.main-navigation', {
-          display: "flex"
-        })
-        .to('.main-navigation', {
-          opacity: 1,
-        })
-        .set('.hero-header', {
-          display: "none"
-        }, '<')
-        .to('.pulse-wrapper', {
-            x: "100%"
-        })
-        .from('.section_home-intro', {
-            display: "none",
-        })
-        .from(['.home-intro__headers-wrapper', '.home-intro__paragraphs'], {
-          opacity: 0,
-          duration: 0.3,
-          stagger: 0.05,
-        })
-        .addLabel('middle')
-        .to('.pulse-wrapper', {
-          x: "0",
-        }, '+=1')
-        .to('.home-intro__paragraphs', {
-          opacity: 0,
-          duration: 0.3
-        }, '+=1')
-        .to('.home-intro__headers-wrapper', {
-            opacity: 0,
-            duration: 0.3
-        })
-        .set('.section_home-intro', {
-            display: "none",
-        })
-        .from([
-          '.home-about__headline',
-          '.home_about__top-paragraph',
-          '.home-about__bottom-paragraph'
-        ], {
-          opacity: 0,
-          duration: 0.3,
-          stagger: 0.05,
-        })
-        .from('.home-about__pointer', {
-            scaleX: 0,
-            transformOrigin: "right",
-            duration: 0.3,
-        })
-        .from('.home-about__pointer', {
-            "--pointer-height": 0,
-            "--pointer-top": 0,
-            "--pointer-opacity": 0,
-        })
-        .addLabel('end')
+  tl_light.addLabel('start')
+    .set('.hero-transition', {
+      zIndex: 2,
+    })
+    .set('.pulse-wrapper', {
+      display: "block"
+    })
+    .to('.pulse-circle', {
+      scale: 1
+    })
+    .to('.pulse', {
+      opacity: 1,
+      stagger: 0.1
+    })
+    .set('.main-navigation', {
+      display: "flex"
+    })
+    .to('.main-navigation', {
+      opacity: 1,
+    })
+    .set('.hero-header', {
+      display: "none"
+    }, '<')
+    .to('.pulse-wrapper', {
+      x: "100%"
+    })
+    .from('.section_home-intro', {
+      display: "none",
+    })
+    .from(['.home-intro__headers-wrapper', '.home-intro__paragraphs'], {
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.05,
+    })
+    .addLabel('middle')
+    .to('.pulse-wrapper', {
+      x: "0",
+    }, '+=1')
+    .to('.home-intro__paragraphs', {
+      opacity: 0,
+      duration: 0.3
+    }, '+=1')
+    .to('.home-intro__headers-wrapper', {
+      opacity: 0,
+      duration: 0.3
+    })
+    .set('.section_home-intro', {
+      display: "none",
+    })
+    .from([
+      '.home-about__headline',
+      '.home_about__top-paragraph',
+      '.home-about__bottom-paragraph'
+    ], {
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.05,
+    })
+    .from('.home-about__pointer', {
+      scaleX: 0,
+      transformOrigin: "right",
+      duration: 0.3,
+    })
+    .from('.home-about__pointer', {
+      "--pointer-height": 0,
+      "--pointer-top": 0,
+      "--pointer-opacity": 0,
+    })
+    .addLabel('end')
 
 }
 
 if (!isMobile) {
-    tl_expand = gsap.timeline({
+  tl_expand = gsap.timeline({
 
     scrollTrigger: {
-        trigger: '.section__home--services-wrapper',
-        start: 'top bottom',
-        end: 'top top',
-        scrub: 0.3,
+      trigger: '.section__home--services-wrapper',
+      start: 'top bottom',
+      end: 'top top',
+      scrub: 0.3,
     }
 
-    })
+  })
 
-    
-
-    tl_expand.to([
+  tl_expand.to([
       '.pulse',
       '.pulse-circle',
     ], {
-        opacity: 0,
-        duration: 0.3,
-        stagger: 0.1
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.1
     })
     .to([
-    '.home-about__headline',
-    '.home_about__top-paragraph',
-    '.home-about__bottom-paragraph',
-    '.home-about__pointer',
+      '.home-about__headline',
+      '.home_about__top-paragraph',
+      '.home-about__bottom-paragraph',
+      '.home-about__pointer',
     ], {
       opacity: 0,
       duration: 0.3,
       stagger: 0.05
     }, '<')
     .to('.section__home--services-wrapper', {
-        backgroundColor: '#fafafa',
-        duration: 0.3,
-        ease: 'power1.out'
-      }, '<')
+      backgroundColor: '#fafafa',
+      duration: 0.3,
+      ease: 'power1.out'
+    }, '<')
 
 }
 
@@ -413,51 +428,51 @@ mm.add("(max-width: 767px)", () => {
 });
 
 if (!isMobile) {
-    tl_stats = gsap.timeline({
+  tl_stats = gsap.timeline({
 
     scrollTrigger: {
-        trigger: '.stats__list',
-        start: 'top 90%',
-        end: 'bottom 50%',
-        scrub: 0.3,
+      trigger: '.stats__list',
+      start: 'top 90%',
+      end: 'bottom 50%',
+      scrub: 0.3,
     }
 
-    });
+  });
 
-    tl_stats.from('.stats__color-block', {
-        scaleX: 0,
-        transformOrigin: "left",
-        duration: 0.3,
-        stagger: 0.1
+  tl_stats.from('.stats__color-block', {
+      scaleX: 0,
+      transformOrigin: "left",
+      duration: 0.3,
+      stagger: 0.1
     })
     .from('.stats__text', {
-        opacity: 0,
-        duration: 0.3,
-        stagger: 0.1
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.1
     }, '<+=0.3')
 }
 
 if (!isMobile) {
-    tl_method = gsap.timeline({
+  tl_method = gsap.timeline({
 
     scrollTrigger: {
-        trigger: '.method__list',
-        start: 'top 90%',
-        end: 'bottom bottom',
-        scrub: 0.3,
+      trigger: '.method__list',
+      start: 'top 90%',
+      end: 'bottom bottom',
+      scrub: 0.3,
     }
 
-    })
+  })
 
-    tl_method.from('.method__single', {
-        x: '100%',
-        duration: 0.3,
-        stagger: 0.1,
+  tl_method.from('.method__single', {
+      x: '100%',
+      duration: 0.3,
+      stagger: 0.1,
     })
     .from('.method__description-wrapper', {
-        opacity: 0,
-        duration: 0.3,
-        stagger: 0.1
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.1
     }, '<+=0.3')
     .set('.hero-header', {
       display: "block"
@@ -465,46 +480,44 @@ if (!isMobile) {
 }
 
 if (!isMobile) {
-    tl_reveal = gsap.timeline({
+  tl_reveal = gsap.timeline({
 
     scrollTrigger: {
-        trigger: '.page-wrapper',
-        start: 'bottom 175%',
-        end: 'bottom bottom',
-        scrub: 0.3,
+      trigger: '.page-wrapper',
+      start: 'bottom 175%',
+      end: 'bottom bottom',
+      scrub: 0.3,
     }
 
-    })
+  })
 
-    tl_reveal.to('.pulse-circle', {
-        scale: 0,
-        duration: 1,
+  tl_reveal.to('.pulse-circle', {
+      scale: 0,
+      duration: 1,
     })
     .to('.section__home--method', {
-        opacity: 0,
-        duration: 0.3,
+      opacity: 0,
+      duration: 0.3,
     }, '<')
     .to('.main-navigation', {
-        opacity: 0,
-        duration: 0.3,
+      opacity: 0,
+      duration: 0.3,
     }, '<')
 }
 
 var master = gsap.timeline()
-  //.add(tl_intro)
-  if (!isMobile) {
-    master
-    .add(tl_hero, /*'<+=6.2'*/)
-  }
-  //.add(tl_hero)
+//.add(tl_intro)
+if (!isMobile) {
   master
-  .add(tl_headline, '>')
-  .add(tl_tagline, '<+=0.3')
+    .add(tl_hero, /*'<+=6.2'*/ )
+    .add(tl_headline, '>')
+    .add(tl_tagline, '<+=0.3')
+}
 
-  if (!isMobile) {
-    master
+if (!isMobile) {
+  master
     .add(tl_footer, '<+=0.5')
-  }
+}
 
 if (!isMobile) {
   master
@@ -516,35 +529,40 @@ if (!isMobile) {
 //.add(tl_stats)
 //.add(tl_about, '>')
 
-function updatePinkCircle(selector, x, y) {
-  gsap.to(selector, { x, y, duration: 0.5 });
-}
-
-document.addEventListener('mousemove', (event) => {
-  const viewportCenterX = window.innerWidth / 2;
-  const viewportCenterY = window.innerHeight / 2;
-
-  const cursorX = event.clientX;
-  const cursorY = event.clientY;
-
-  const deltaX = cursorX - viewportCenterX;
-  const deltaY = cursorY - viewportCenterY;
-
-  const distanceToCenter = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-  const moveAmount = 0.1; // Adjust this value to control the movement amount
-
-  if (cursorX < 0 || cursorX > window.innerWidth || cursorY < 0 || cursorY > window
-    .innerHeight) {
-    updatePinkCircle(pinkCircles.tr, xN, xP);
-    updatePinkCircle(pinkCircles.br, xN, xN);
-    updatePinkCircle(pinkCircles.bl, xP, xN);
-    updatePinkCircle(pinkCircles.tl, xP, xP);
-
-  } else {
-    updatePinkCircle(pinkCircles.tr, xN - (deltaX / distanceToCenter * moveAmount * distanceToCenter), xP - (deltaY / distanceToCenter * moveAmount * distanceToCenter));
-    updatePinkCircle(pinkCircles.br, xN - (deltaX / distanceToCenter * moveAmount * distanceToCenter) * 0.5, xN - (deltaY / distanceToCenter * moveAmount * distanceToCenter) * 0.5);
-    updatePinkCircle(pinkCircles.bl, xP - (deltaX / distanceToCenter * moveAmount * distanceToCenter), xN - (deltaY / distanceToCenter * moveAmount * distanceToCenter));
-    updatePinkCircle(pinkCircles.tl, xP - (deltaX / distanceToCenter * moveAmount * distanceToCenter) * 0.5, xP - (deltaY / distanceToCenter * moveAmount * distanceToCenter) * 0.5);
+if (!isMobile) {
+  function updatePinkCircle(selector, x, y) {
+    gsap.to(selector, { x, y, duration: 0.5 });
   }
-});
+
+  document.addEventListener('mousemove', (event) => {
+    const viewportCenterX = window.innerWidth / 2;
+    const viewportCenterY = window.innerHeight / 2;
+
+    const cursorX = event.clientX;
+    const cursorY = event.clientY;
+
+    const deltaX = cursorX - viewportCenterX;
+    const deltaY = cursorY - viewportCenterY;
+
+    const distanceToCenter = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    const moveAmount = 0.1;
+
+    if (
+      cursorX < 0 || cursorX > window.innerWidth ||
+      cursorY < 0 || cursorY > window.innerHeight
+    ) {
+      updatePinkCircle(pinkCircles.tr, xN, xP);
+      updatePinkCircle(pinkCircles.br, xN, xN);
+      updatePinkCircle(pinkCircles.bl, xP, xN);
+      updatePinkCircle(pinkCircles.tl, xP, xP);
+    } else {
+      const dx = deltaX / distanceToCenter * moveAmount * distanceToCenter;
+      const dy = deltaY / distanceToCenter * moveAmount * distanceToCenter;
+
+      updatePinkCircle(pinkCircles.tr, xN - dx, xP - dy);
+      updatePinkCircle(pinkCircles.br, xN - dx * 0.5, xN - dy * 0.5);
+      updatePinkCircle(pinkCircles.bl, xP - dx, xN - dy);
+      updatePinkCircle(pinkCircles.tl, xP - dx * 0.5, xP - dy * 0.5);
+    }
+  });
+}
